@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "strict": true
+  },
   "name": "personal-website",
   "private": true,
   "version": "0.0.0",
