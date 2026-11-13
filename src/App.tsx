@@ -1,3 +1,5 @@
+import { projects } from "./content/projects";
+
 function App() {
   return (
     <>
@@ -7,31 +9,20 @@ function App() {
       </header>
       <main>
         <ul>
-          <li>
-            <a
-              target="_blank"
-              href="https://hshs-dev.github.io/react-memory-game/"
-            >
-              Memory Sequence Game
-            </a>
-          </li>
-          <li>
-            <a target="_blank" href="https://brutal-tomato.netlify.app/">
-              Brutal Tomato
-            </a>
-          </li>
-          <li>
-            <a
-              target="_blank"
-              href="https://hshs-dev.github.io/frontend-mentors-challenges-gallery/"
-            >
-              Frontend Mentor Challenges Gallery
-            </a>
-          </li>
+          {projects.map((project) => {
+            return (
+              <li key={project.slug}>
+                <a target="_blank" href={project.href}>
+                  {project.title}
+                </a>
+                <p>{project.tagline}</p>
+              </li>
+            );
+          })}
         </ul>
       </main>
       <footer>
-        <p>Contact links:</p>
+        <p>Contact Links:</p>
         <ul>
           <li>
             <a target="_blank" href="https://linkedin.com/in/hshsdev/">
@@ -39,10 +30,7 @@ function App() {
             </a>
           </li>
           <li>
-            <a
-              target="_blank"
-              href="https://github.com/HsHs-dev?tab=repositories"
-            >
+            <a target="_blank" href="https://github.com/Hshs-dev">
               GitHub
             </a>
           </li>
