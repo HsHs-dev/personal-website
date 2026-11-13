@@ -8,6 +8,7 @@ function App() {
         <p>Welcome to my cozy home 🏡</p>
       </header>
       <main>
+        <h2>Projects</h2>
         <ul>
           {projects.map((project) => {
             return (
@@ -22,7 +23,7 @@ function App() {
         </ul>
       </main>
       <footer>
-        <p>Contact Links:</p>
+        <h2>Contact Links:</h2>
         <ul>
           <li>
             <a target="_blank" href="https://linkedin.com/in/hshsdev/">
