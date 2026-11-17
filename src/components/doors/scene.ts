@@ -21,11 +21,11 @@ interface SceneOptions {
 export function createDoorScene(options: SceneOptions) {
   const { canvas, container, labels, ids, veil } = options;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.max(1, Math.min(window.devicePixelRatio, options.maxPixelRatio)));
+  renderer.setPixelRatio(Math.max(1, Math.min(window.devicePixelRatio, options.maxPixelRatio, container.clientWidth <= 760 ? 1.5 : 2)));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.12;
+  renderer.toneMappingExposure = 1.02;
   const scene = new THREE.Scene();
   scene.background = new THREE.Color();
   const camera = new THREE.OrthographicCamera(-8, 8, 4, -4, .1, 60);
@@ -36,7 +36,8 @@ export function createDoorScene(options: SceneOptions) {
   Object.assign(sun.shadow.camera, { left: -10, right: 10, top: 12, bottom: -10, near: .5, far: 35 });
   sun.shadow.normalBias = .035;
   sun.shadow.bias = -.0001;
-  sun.shadow.radius = 3;
+  sun.shadow.radius = 4;
+  sun.shadow.intensity = .35;
   const hemisphere = new THREE.HemisphereLight('#fff6e5', '#b7a68b', 2.1);
   const fill = new THREE.DirectionalLight('#d9e7dc', .7);
   fill.position.set(6, 4, 4);
@@ -64,17 +65,26 @@ export function createDoorScene(options: SceneOptions) {
   let locked = false;
   let visible = true;
 
+  let moodInitialized = false;
+  let moodTransition: { elapsed: number; apply: (t: number) => void } | null = null;
+  const moodColors = [scene.background as THREE.Color, sun.color, hemisphere.color, hemisphere.groundColor, fill.color, floor.material.color];
+  const moodNumbers = () => [sun.intensity, hemisphere.intensity, fill.intensity, floor.material.opacity];
+  function applyNumbers(values: number[]) {
+    [sun.intensity, hemisphere.intensity, fill.intensity, floor.material.opacity] = values;
+  }
   function setMood(mood: DoorMood) {
+    const before = moodColors.map(color => color.clone());
+    const numbersBefore = moodNumbers();
     const night = mood === 'night';
-    (scene.background as THREE.Color).set(night ? '#18232f' : '#f4efe5');
-    sun.color.set(night ? '#b4ceff' : '#fff1d8');
-    sun.intensity = night ? .85 : 3.2;
-    hemisphere.color.set(night ? '#a6bce3' : '#fff6e5');
-    hemisphere.groundColor.set(night ? '#273144' : '#b7a68b');
-    hemisphere.intensity = night ? .65 : 2.1;
-    fill.color.set(night ? '#ffd29a' : '#d9e7dc');
+    (scene.background as THREE.Color).set(night ? '#202e38' : '#eee6d7');
+    sun.color.set(night ? '#b4c2c0' : '#f4ecdd');
+    sun.intensity = night ? 1.05 : 2.7;
+    hemisphere.color.set(night ? '#b4c2c0' : '#eee6d7');
+    hemisphere.groundColor.set(night ? '#2d3d46' : '#dfd3bf');
+    hemisphere.intensity = night ? 1.25 : 1.8;
+    fill.color.set(night ? '#ead5ac' : '#d9e2dc');
     fill.intensity = night ? .9 : .7;
-    floor.material.color.set(night ? '#050b15' : '#85724d');
+    floor.material.color.set(night ? '#172f30' : '#343b39');
     floor.material.opacity = night ? .35 : .17;
     for (const { model } of models) model.root.traverse(object => {
       if (object instanceof THREE.PointLight) {
@@ -82,6 +92,15 @@ export function createDoorScene(options: SceneOptions) {
         object.intensity = Number(object.userData.dayIntensity) * (night ? 1.6 : 1);
       }
     });
+    const after = moodColors.map(color => color.clone()), numbersAfter = moodNumbers();
+    if (moodInitialized && !reduced) {
+      const apply = (t: number) => {
+        moodColors.forEach((color, i) => color.copy(before[i]).lerp(after[i], t));
+        applyNumbers(numbersBefore.map((value, i) => THREE.MathUtils.lerp(value, numbersAfter[i], t)));
+      };
+      moodTransition = { elapsed: 0, apply }; apply(0);
+    } else moodTransition = null;
+    moodInitialized = true;
   }
 
   function positionLabels() {
@@ -95,16 +114,16 @@ export function createDoorScene(options: SceneOptions) {
 
   function fit() {
     const width = Math.max(container.clientWidth, 1), height = Math.max(container.clientHeight, 1);
-    const grid = width <= 760 && ids.length > 2;
+    const grid = width <= 1000 && ids.length > 2;
     const columns = grid ? 2 : ids.length;
     const aspect = width / height;
     baseHeight = Math.max(grid ? 11.9 : 6.6, (columns === 2 ? 7.1 : columns * 3.35 + 1.1) / aspect);
     camera.left = -baseHeight * aspect / 2; camera.right = baseHeight * aspect / 2;
     camera.top = baseHeight / 2; camera.bottom = -baseHeight / 2;
-    baseTarget.set(0, grid ? 4.4 : 1.6, 0);
-    models.forEach(({ model }, i) => model.root.position.set(grid ? (i % 2 ? 1.68 : -1.68) : (i - (ids.length - 1) / 2) * 3.35, grid && i < 2 ? 5.9 : 0, 0));
+    baseTarget.set(0, grid ? 4.8 : 1.6, 0);
+    models.forEach(({ model }, i) => model.root.position.set(grid ? (i % 2 ? 1.68 : -1.68) : (i - (ids.length - 1) / 2) * 3.35, grid && i < 2 ? 6.8 : 0, 0));
     if (!locked) {
-      camera.position.copy(baseTarget).add(new THREE.Vector3(0, 3.7, 26));
+      camera.position.copy(baseTarget).add(new THREE.Vector3(0, 2.3, 26));
       camera.lookAt(baseTarget); camera.zoom = 1;
     }
     camera.updateProjectionMatrix(); camera.updateMatrixWorld();
@@ -132,7 +151,8 @@ export function createDoorScene(options: SceneOptions) {
   function enter(id: DoorId): Promise<void> {
     if (locked || disposed) return Promise.reject(new Error('A doorway transition is already running.'));
     locked = true;
-    models.forEach(item => { item.model.hover = 0; item.model.target = item.id === id ? 1.48 : 0; });
+    veil.style.background = { about: '#f4ecdd', work: '#e4e5da', library: '#49392f', garden: '#172f30' }[id];
+    models.forEach(item => { item.model.hover = 0; item.model.target = item.id === id ? 1.14 : 0; });
     return new Promise((resolve, reject) => { entry = { id, elapsed: 0, duration: reduced ? REDUCED_ENTER_DURATION : ENTER_DURATION, reduced, resolve, reject }; });
   }
 
@@ -162,6 +182,12 @@ export function createDoorScene(options: SceneOptions) {
     const dt = Math.min((now - last) / 1000, .04); last = now;
     if (disposed || document.hidden || (!visible && !entry)) return;
     elapsed += dt;
+    if (moodTransition) {
+      moodTransition.elapsed += dt;
+      const t = reduced ? 1 : Math.min(1, moodTransition.elapsed / .6);
+      moodTransition.apply(t * t * (3 - 2 * t));
+      if (t === 1) moodTransition = null;
+    }
     for (const { model } of models) model.update(dt, elapsed, reduced);
     if (entry) {
       entry.elapsed += dt;
@@ -169,7 +195,7 @@ export function createDoorScene(options: SceneOptions) {
       const frame = entryFrame(progress, entry.reduced);
       const selected = models.find(item => item.id === entry!.id)!.model;
       aim.set(selected.root.position.x, selected.root.position.y + 1.9, -.55).lerp(baseTarget, 1 - frame.travel);
-      camera.position.copy(aim).add(new THREE.Vector3(0, 3.7 * (1 - frame.travel), 26 - 23 * frame.travel));
+      camera.position.copy(aim).add(new THREE.Vector3(0, 2.3 * (1 - frame.travel), 26 - 23 * frame.travel));
       camera.lookAt(aim);
       camera.zoom = THREE.MathUtils.lerp(1, baseHeight / 1.35, frame.travel);
       camera.updateProjectionMatrix();

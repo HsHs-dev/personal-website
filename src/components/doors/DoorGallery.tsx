@@ -13,7 +13,7 @@ export const DoorGallery = forwardRef<DoorGalleryHandle, DoorGalleryProps>(funct
   return <DoorGalleryScene key={JSON.stringify([idsKey, maxPixelRatio])} {...props} idsKey={idsKey} maxPixelRatio={maxPixelRatio} ref={ref} />;
 });
 
-const DoorGalleryScene = forwardRef<DoorGalleryHandle, DoorGalleryProps & { idsKey: string }>(function DoorGalleryScene({ idsKey, mood = 'night', interaction, onEnter, onEnterStart, onError, reducedMotion, sound = false, maxPixelRatio = 1.8, resetKey, className = '', style }, ref) {
+const DoorGalleryScene = forwardRef<DoorGalleryHandle, DoorGalleryProps & { idsKey: string }>(function DoorGalleryScene({ idsKey, mood = 'night', interaction, onEnter, onEnterStart, onError, reducedMotion, sound = false, onDoorSound, maxPixelRatio = 1.8, resetKey, className = '', style }, ref) {
   const ids = useMemo(() => idsKey.split(',') as DoorId[], [idsKey]);
   const systemReduced = useSystemReducedMotion();
   const reduced = reducedMotion ?? systemReduced;
@@ -22,7 +22,6 @@ const DoorGalleryScene = forwardRef<DoorGalleryHandle, DoorGalleryProps & { idsK
   const stage = useRef<HTMLDivElement>(null), canvas = useRef<HTMLCanvasElement>(null), veil = useRef<HTMLDivElement>(null);
   const labels = useRef(new Map<DoorId, HTMLButtonElement>());
   const engine = useRef<DoorScene | null>(null);
-  const audio = useRef<AudioContext | null>(null);
   const generation = useRef(0), mounted = useRef(false), busyRef = useRef(false);
   const [status, setStatus] = useState<Status>('loading');
   const [selected, setSelected] = useState<DoorId | null>(null);
@@ -44,15 +43,7 @@ const DoorGalleryScene = forwardRef<DoorGalleryHandle, DoorGalleryProps & { idsK
   useImperativeHandle(ref, () => ({ reset }), [reset]);
 
   function playSound(id: DoorId) {
-    if (!sound) return;
-    try {
-      audio.current ??= new AudioContext();
-      const context = audio.current; void context.resume().catch(() => {});
-      const osc = context.createOscillator(), gain = context.createGain(), now = context.currentTime;
-      osc.type = 'triangle'; osc.frequency.setValueAtTime([175,230,135,310][DOOR_IDS.indexOf(id)], now); osc.frequency.exponentialRampToValueAtTime(90, now + .14);
-      gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(.025, now + .012); gain.gain.exponentialRampToValueAtTime(.0001, now + .22);
-      osc.connect(gain); gain.connect(context.destination); osc.onended = () => { osc.disconnect(); gain.disconnect(); }; osc.start(now); osc.stop(now + .24);
-    } catch { /* Sound is optional; navigation remains available. */ }
+    if (sound) { try { onDoorSound?.(id); } catch { /* Optional host audio cannot block navigation. */ } }
   }
 
   async function choose(id: DoorId) {
@@ -87,7 +78,7 @@ const DoorGalleryScene = forwardRef<DoorGalleryHandle, DoorGalleryProps & { idsK
     if (veil.current) veil.current.style.opacity = '0';
     labels.current.forEach(label => { label.style.opacity = '1'; });
     const timer = { id: 0 };
-    const fonts = document.fonts ? Promise.allSettled([document.fonts.load('600 52px HDSCaveat'), document.fonts.load('400 30px HDSLora')]) : Promise.resolve();
+    const fonts = document.fonts ? Promise.allSettled([document.fonts.load('600 52px HDSCaveat'), document.fonts.load('600 30px HDSLora'), document.fonts.load('600 20px HDSBody')]) : Promise.resolve();
     const timeout = new Promise<void>(resolve => { timer.id = window.setTimeout(resolve, 2000); });
     void Promise.all([import('./scene'), Promise.race([fonts, timeout])]).then(([module]) => {
       clearTimeout(timer.id);
@@ -103,7 +94,7 @@ const DoorGalleryScene = forwardRef<DoorGalleryHandle, DoorGalleryProps & { idsK
       const error = reason instanceof Error ? reason : new Error(String(reason));
       setSceneError('The 3D scene is unavailable. The door buttons still work.'); setStatus('ready'); latest.current.onError?.(error);
     });
-    return () => { cancelled = true; mounted.current = false; busyRef.current = false; clearTimeout(timer.id); local?.dispose(); if (engine.current === local) engine.current = null; void audio.current?.close().catch(() => {}); audio.current = null; };
+    return () => { cancelled = true; mounted.current = false; busyRef.current = false; clearTimeout(timer.id); local?.dispose(); if (engine.current === local) engine.current = null; };
   }, [ids, maxPixelRatio]);
 
   const previousReset = useRef(resetKey);
@@ -111,7 +102,7 @@ const DoorGalleryScene = forwardRef<DoorGalleryHandle, DoorGalleryProps & { idsK
   function hover(id: DoorId | null) { if (!busy) { setHovered(id); engine.current?.hover(id); } }
   function close() { const id = selected; reset(); if (id) requestAnimationFrame(() => { if (mounted.current) labels.current.get(id)?.focus({ preventScroll: true }); }); }
 
-  return <section ref={root} tabIndex={-1} className={`hds-doors hds-gallery ${className}`} data-mood={mood} data-reduced={reduced} data-count={ids.length} data-status={status} data-fallback={!!sceneError} style={style} aria-label="Doors into Hassan's digital space" onKeyDown={event => { if (event.key === 'Escape' && selected) { event.preventDefault(); close(); } }}>
+  return <section ref={root} tabIndex={-1} className={`hds-doors hds-gallery ${className}`} data-mood={mood} data-reduced={reduced} data-count={ids.length} data-selected={selected ?? undefined} data-status={status} data-fallback={!!sceneError} style={style} aria-label="Doors into Hassan's digital space" onKeyDown={event => { if (event.key === 'Escape' && selected) { event.preventDefault(); close(); } }}>
     <div className="hds-stage" ref={stage}>
       <canvas ref={canvas} className="hds-canvas" aria-hidden="true" />
       <div className="hds-labels">

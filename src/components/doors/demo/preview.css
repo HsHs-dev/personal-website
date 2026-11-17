@@ -16,3 +16,16 @@ body{margin:0;background:#18232f}
 @keyframes room-arrives{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){.door-demo-room{animation:none}}
 @media(max-width:500px){.door-demo-toolbar{gap:8px;padding:10px}.door-demo-toolbar>span{font-size:7px;letter-spacing:.7px;margin-right:0}.door-demo-toolbar button{font-size:10px;padding:7px 10px}}
+
+/* Preview destinations match the opaque doorway handoff colors. */
+body{background:#202e38}
+.door-demo-toolbar{font-size:14px;background:#202e38;color:#d9e2dc;flex-wrap:wrap}
+.door-demo-toolbar>span{font-size:12px}
+.door-demo-toolbar button{min-height:44px;font-size:14px;border-radius:8px}
+.door-demo-room[data-room=about]{background:#f4ecdd;color:#343b39}
+.door-demo-room[data-room=work]{background:#e4e5da;color:#343b39}
+.door-demo-room[data-room=library]{background:#49392f;color:#ead5ac}
+.door-demo-room[data-room=garden]{background:#172f30;color:#d9e2dc}
+.door-demo-room .door-demo-eyebrow{color:inherit;font-size:14px}
+.door-demo-room .door-demo-note{opacity:1;font-size:14px}
+.door-demo-room>a{font-size:16px;min-height:44px;border-color:currentColor;border-radius:8px}
