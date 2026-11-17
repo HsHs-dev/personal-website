@@ -73,3 +73,7 @@ export default defineConfig([
 ])
 
 ```
+
+## Reusable 3D doors
+
+The door artwork is exported into `src/components/doors/`. See [the setup guide](docs/DOOR_COMPONENTS.md) for React examples and navigation callbacks. Run the dev server and open `/door-preview.html` for the isolated component preview; the existing application entry is unchanged.
