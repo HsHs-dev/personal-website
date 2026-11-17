@@ -4,7 +4,7 @@ function App() {
   return (
     <>
       <header>
-        <h1>Hassan's Digital Space</h1>
+        <h1 className="font-bold">Hassan's Digital Space</h1>
         <p>Welcome to my cozy home 🏡</p>
       </header>
       <main>
