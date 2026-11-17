@@ -15,6 +15,7 @@ dist-ssr
 # Local project journal
 /docs/STORY.md
 /docs/JOURNEY.md
+/docs/*
 
 # Editor directories and files
 .vscode/*

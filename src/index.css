@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+:root {
+
+  /* Home Day */
+  --color-plaster: oklch(92.7174% 0.021806 83.263);
+  --color-paper: oklch(94.5306% 0.021705 83.264);
+  --color-ink: oklch(34.5034% 0.010038 176.695);
+  --color-muted: oklch(50.1553% 0.01296 123.676);
+  --color-petrol: oklch(45.0907% 0.04652 189.628);
+}
+
+@theme inline {
+  --color-page: var(--color-plaster);
+  --color-surface: var(--color-paper);
+  --color-primary: var(--color-ink);
+  --color-secondary: var(--color-muted);
+  --color-focus: var(--color-petrol)
+}
