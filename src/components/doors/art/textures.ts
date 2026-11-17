@@ -11,7 +11,7 @@ function canvasTexture(w:number,h:number,draw:(c:CanvasRenderingContext2D,w:numb
 function paintedWood(color:string,grain='#54432b',strength=.1){
   return canvasTexture(256,768,(c,w,h)=>{
     c.fillStyle=color;c.fillRect(0,0,w,h);
-    for(let i=0;i<1200;i++){let x=random()*w,y=random()*h;c.strokeStyle=i%3===0?`rgba(255,249,226,${random()*strength})`:grain;c.globalAlpha=random()*strength;c.lineWidth=.3+random()*2.5;c.beginPath();c.moveTo(x,y);c.bezierCurveTo(x+random()*8-4,y+35,x+random()*12-6,y+90,x+random()*8-4,y+60+random()*240);c.stroke();}
+    for(let i=0;i<1200;i++){const x=random()*w,y=random()*h;c.strokeStyle=i%3===0?`rgba(255,249,226,${random()*strength})`:grain;c.globalAlpha=random()*strength;c.lineWidth=.3+random()*2.5;c.beginPath();c.moveTo(x,y);c.bezierCurveTo(x+random()*8-4,y+35,x+random()*12-6,y+90,x+random()*8-4,y+60+random()*240);c.stroke();}
     c.globalAlpha=1;
     const g=c.createLinearGradient(0,0,w,0);g.addColorStop(0,'#2014000d');g.addColorStop(.35,'#fff4cd0a');g.addColorStop(.8,'#fff9e40e');g.addColorStop(1,'#37241114');c.fillStyle=g;c.fillRect(0,0,w,h);
   });
@@ -56,7 +56,7 @@ function sticker(kind:string){return canvasTexture(320,360,(c,w,h)=>{
 });}
 
 function growthMarks(){return canvasTexture(120,900,(c)=>{c.strokeStyle='#807663';c.fillStyle='#807663';c.lineWidth=2;c.font='17px HDSCaveat, cursive';for(let i=0;i<12;i++){const y=70+i*63;const x=20+random()*6;c.beginPath();c.moveTo(x,y);c.lineTo(x+(i%3===0?66:35),y+random()*3);c.stroke();}c.save();c.translate(88,440);c.rotate(-Math.PI/2);c.font='25px HDSCaveat,cursive';c.fillText('still growing',0,0);c.restore();});}
-function scribbles(){return canvasTexture(400,500,(c)=>{c.globalAlpha=.65;stroke(c,[[55,140],[95,103],[139,143],[139,205],[57,205],[55,140]],'#b88357',4);stroke(c,[[79,203],[79,166],[106,165],[106,202]],'#b88357',4);c.strokeStyle='#c2a349';c.lineWidth=4;c.beginPath();c.arc(257,80,28,0,Math.PI*2);c.stroke();for(let i=0;i<9;i++){let a=i/9*Math.PI*2;stroke(c,[[257+Math.cos(a)*37,80+Math.sin(a)*37],[257+Math.cos(a)*47,80+Math.sin(a)*47]],'#c2a349',3);}stroke(c,[[201,260],[217,240],[231,260],[247,238]],'#8a9e9d',3);c.font='34px HDSCaveat,cursive';c.fillStyle='#809779';c.fillText('hello, world!',120,374);});}
+function scribbles(){return canvasTexture(400,500,(c)=>{c.globalAlpha=.65;stroke(c,[[55,140],[95,103],[139,143],[139,205],[57,205],[55,140]],'#b88357',4);stroke(c,[[79,203],[79,166],[106,165],[106,202]],'#b88357',4);c.strokeStyle='#c2a349';c.lineWidth=4;c.beginPath();c.arc(257,80,28,0,Math.PI*2);c.stroke();for(let i=0;i<9;i++){const a=i/9*Math.PI*2;stroke(c,[[257+Math.cos(a)*37,80+Math.sin(a)*37],[257+Math.cos(a)*47,80+Math.sin(a)*47]],'#c2a349',3);}stroke(c,[[201,260],[217,240],[231,260],[247,238]],'#8a9e9d',3);c.font='34px HDSCaveat,cursive';c.fillStyle='#809779';c.fillText('hello, world!',120,374);});}
 
 const books: Book[]=[
   {title:'CRIME AND PUNISHMENT',author:'DOSTOEVSKY',color:'#925b4d',ink:'#eddbb7'},

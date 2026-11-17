@@ -2,17 +2,18 @@ import { forwardRef, useCallback, useEffect, useId, useImperativeHandle, useMemo
 import { DOOR_DETAILS, DOOR_IDS } from './catalog';
 import type { DoorScene } from './scene';
 import type { DoorGalleryHandle, DoorGalleryProps, DoorId } from './types';
+import { useSystemReducedMotion } from './useSystemReducedMotion';
 import './doors.css';
 
 type Status = 'loading' | 'ready' | 'entering' | 'arrived' | 'error';
-export function useSystemReducedMotion() {
-  const [value, setValue] = useState(false);
-  useEffect(() => { const query = window.matchMedia('(prefers-reduced-motion: reduce)'); const change = () => setValue(query.matches); change(); query.addEventListener('change', change); return () => query.removeEventListener('change', change); }, []);
-  return value;
-}
+// A different scene configuration needs fresh UI state and WebGL resources.
+export const DoorGallery = forwardRef<DoorGalleryHandle, DoorGalleryProps>(function DoorGallery(props, ref) {
+  const idsKey = [...new Set(props.doors ?? DOOR_IDS)].filter(id => DOOR_IDS.includes(id)).join(',') || DOOR_IDS.join(',');
+  const maxPixelRatio = props.maxPixelRatio ?? 1.8;
+  return <DoorGalleryScene key={JSON.stringify([idsKey, maxPixelRatio])} {...props} idsKey={idsKey} maxPixelRatio={maxPixelRatio} ref={ref} />;
+});
 
-export const DoorGallery = forwardRef<DoorGalleryHandle, DoorGalleryProps>(function DoorGallery({ doors = DOOR_IDS, mood = 'night', interaction, onEnter, onEnterStart, onError, reducedMotion, sound = false, maxPixelRatio = 1.8, resetKey, className = '', style }, ref) {
-  const idsKey = [...new Set(doors)].filter(id => DOOR_IDS.includes(id)).join(',') || DOOR_IDS.join(',');
+const DoorGalleryScene = forwardRef<DoorGalleryHandle, DoorGalleryProps & { idsKey: string }>(function DoorGalleryScene({ idsKey, mood = 'night', interaction, onEnter, onEnterStart, onError, reducedMotion, sound = false, maxPixelRatio = 1.8, resetKey, className = '', style }, ref) {
   const ids = useMemo(() => idsKey.split(',') as DoorId[], [idsKey]);
   const systemReduced = useSystemReducedMotion();
   const reduced = reducedMotion ?? systemReduced;
@@ -83,7 +84,6 @@ export const DoorGallery = forwardRef<DoorGalleryHandle, DoorGalleryProps>(funct
   useEffect(() => {
     mounted.current = true;
     let cancelled = false, local: DoorScene | null = null;
-    setStatus('loading'); setSceneError(''); setSelected(null); setHovered(null); setNavigationError('');
     if (veil.current) veil.current.style.opacity = '0';
     labels.current.forEach(label => { label.style.opacity = '1'; });
     const timer = { id: 0 };
@@ -103,7 +103,7 @@ export const DoorGallery = forwardRef<DoorGalleryHandle, DoorGalleryProps>(funct
       const error = reason instanceof Error ? reason : new Error(String(reason));
       setSceneError('The 3D scene is unavailable. The door buttons still work.'); setStatus('ready'); latest.current.onError?.(error);
     });
-    return () => { cancelled = true; mounted.current = false; generation.current++; busyRef.current = false; clearTimeout(timer.id); local?.dispose(); if (engine.current === local) engine.current = null; void audio.current?.close().catch(() => {}); audio.current = null; };
+    return () => { cancelled = true; mounted.current = false; busyRef.current = false; clearTimeout(timer.id); local?.dispose(); if (engine.current === local) engine.current = null; void audio.current?.close().catch(() => {}); audio.current = null; };
   }, [ids, maxPixelRatio]);
 
   const previousReset = useRef(resetKey);

@@ -41,7 +41,7 @@ function pot(parent:THREE.Object3D,x:number,y:number,z:number,scale=.5){const g=
 function aboutDoor(surface:THREE.Object3D,root:THREE.Object3D){
   box(surface,1.93,3.73,.14,0,1.915,0,ivory,.03);
   panel(surface,1.53,1.46,0,2.8,ivory);panel(surface,1.53,1.45,0,1.03,ivory);
-  for(let i=0;i<25;i++){let x=i%2?-.92:.92;box(surface,.018+random()*.04,.035+random()*.12,.007,x,.1+random()*3.6,.075,mat('#b39d7a'),.003);}
+  for(let i=0;i<25;i++){const x=i%2?-.92:.92;box(surface,.018+random()*.04,.035+random()*.12,.007,x,.1+random()*3.6,.075,mat('#b39d7a'),.003);}
   label(surface,'About',1.15,.48,-.05,3.31,.143,{color:'#ae6956',font:'600 83px HDSCaveat,cursive',width:512,height:180,rotate:-.05});
   decal(surface,sticker('dragon'),.51,.59,-.43,2.7,.147,.14);
   decal(surface,sticker('pirate'),.59,.68,.30,2.53,.15,-.1);
@@ -112,7 +112,7 @@ function gardenDoor(surface:THREE.Object3D,root:THREE.Object3D,leaves:Leaf[]){
   knob(surface,.75,1.22);hinge(surface);
   const sign=box(surface,.82,.24,.04,-.05,.59,.13,wood('#bbbd93'),.025);label(sign,'garden',.71,.18,0,0,.024,{font:'52px HDSCaveat,cursive',color:'#4f6548'});
   // Climbing stems belong to the fixed frame, so the leaf can open freely.
-  for(let side of [-1]){
+  for(const side of [-1]){
     const pts=[];for(let i=0;i<7;i++)pts.push([side*(1.12+Math.sin(i*.9)*.08),.6+i*.48,.12+Math.cos(i)*.04]);
     line(root,pts,.018,mat('#6f8051'));
     for(let i=0;i<9;i++){

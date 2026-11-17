@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { DoorGallery, useSystemReducedMotion } from './DoorGallery';
+import { DoorGallery } from './DoorGallery';
+import { useSystemReducedMotion } from './useSystemReducedMotion';
 import type { DoorEntranceProps, DoorMood, DoorProps } from './types';
 
 /** Ready-to-use entrance shell. Does not mutate body, routes, localStorage or document styles. */
