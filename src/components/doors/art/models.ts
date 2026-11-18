@@ -17,7 +17,7 @@ function cyl(parent:THREE.Object3D,rt:number,rb:number,h:number,x:number,y:numbe
 function decal(parent:THREE.Object3D,map:THREE.Texture,w:number,h:number,x:number,y:number,z:number,angle=0){const m=mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshStandardMaterial({map,transparent:true,roughness:.95,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1}),parent,x,y,z);m.rotation.z=angle;m.castShadow=false;return m;}
 function label(parent:THREE.Object3D,text:string,w:number,h:number,x:number,y:number,z:number,options:LetteringOptions={}){return decal(parent,lettering(text,options),w,h,x,y,z,options.rotate||0);}
 function line(parent:THREE.Object3D,points:number[][],r:number,material:THREE.Material){const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(p[0],p[1],p[2])));return mesh(new THREE.TubeGeometry(curve,Math.max(8,points.length*8),r,5,false),material,parent);}
-const brass=mat('#b0985c',.4,.55),darkBrass=mat('#756341',.5,.45),ivory=wood('#e2d5b9'),walnut=wood('#775336',.24),sage=wood('#81936f'),officeWood=wood('#a17f58',.18);
+const brass=mat('#b0985c',.4,.55),darkBrass=mat('#756341',.5,.45),ivory=wood('#eee6d7',.06),walnut=wood('#634d3d',.10),sage=wood('#617a65',.07),officeWood=wood('#80644e',.09);
 const cream=mat('#eee5d2');
 
 function frame(root:THREE.Object3D,material:THREE.Material,type:number){
@@ -30,10 +30,11 @@ function frame(root:THREE.Object3D,material:THREE.Material,type:number){
   box(root,2.38,.22,.41,0,3.96,.01,material,.035);
   box(root,2.48,.075,.47,0,4.08,.015,material,.02);
   box(root,2.18,.09,.55,0,.045,.02,type===2?walnut:material,.02);
-  if(type===0){decal(root,growthMarks(),.19,2.95,-1.067,1.8,.18);for(let i=0;i<15;i++){const y=random()*3.7;box(root,.018+random()*.05,.04+random()*.14,.004,(i%2?1:-1)*1.13,y,.172,mat('#b8a586'),.003);}}
+  if(type===0){decal(root,growthMarks(),.19,2.95,-1.067,1.8,.18);for(let i=0;i<6;i++){const y=random()*3.7;box(root,.018+random()*.05,.04+random()*.14,.004,(i%2?1:-1)*1.13,y,.172,mat('#b8a586'),.003);}}
 }
 function hinge(surface:THREE.Object3D){for(const y of [.55,3.25]){const h=cyl(surface,.035,.035,.2,-.96,y,.04,darkBrass);h.rotation.y=Math.PI/2;}}
-function knob(surface:THREE.Object3D,x=.72,y=1.65){box(surface,.105,.29,.035,x,y,.115,darkBrass,.025);const stem=cyl(surface,.032,.032,.11,x,y,.185,brass);stem.rotation.x=Math.PI/2;orb(surface,x,y,.265,.083,.083,.065,brass);}
+const handles: THREE.Group[]=[];
+function knob(parent:THREE.Object3D,x=.72,y=1.65){const surface=new THREE.Group();surface.position.set(x,y,0);parent.add(surface);handles.push(surface);x=0;y=0;box(surface,.105,.29,.035,x,y,.115,darkBrass,.025);const stem=cyl(surface,.032,.032,.11,x,y,.185,brass);stem.rotation.x=Math.PI/2;orb(surface,x,y,.265,.083,.083,.065,brass);}
 function panel(parent:THREE.Object3D,w:number,h:number,x:number,y:number,material:THREE.Material){box(parent,w+.07,h+.07,.038,x,y,.082,material,.025);box(parent,w,h,.02,x,y,.11,material,.02);}
 function book(parent:THREE.Object3D,desc:Book,w:number,h:number,x:number,y:number,z:number,lean=0){const g=new THREE.Group();parent.add(g);g.position.set(x,y,z);g.rotation.z=lean;box(g,w,h,.33,0,h/2,0,mat(desc.color),.009);box(g,w-.025,h-.045,.29,0,h/2,-.018,mat('#d9cdb0'),.003);box(g,w,.022,.35,0,.011,0,mat(desc.color),.003);box(g,w,.022,.35,0,h-.011,0,mat(desc.color),.003);decal(g,bookSpine(desc),w-.014,h-.014,0,h/2,.171);return g;}
 function pot(parent:THREE.Object3D,x:number,y:number,z:number,scale=.5){const g=new THREE.Group();g.position.set(x,y,z);g.scale.setScalar(scale);parent.add(g);cyl(g,.23,.16,.42,0,.21,0,mat('#bd825f'));cyl(g,.25,.25,.065,0,.4,0,mat('#c89170'));cyl(g,.21,.21,.015,0,.438,0,mat('#665742'));for(let i=0;i<8;i++){const a=i*Math.PI*.76;const lx=Math.cos(a)*(.14+random()*.14),lz=Math.sin(a)*.2;line(g,[[0,.43,0],[lx*.5,.67,lz*.5],[lx,.83+random()*.3,lz]],.009,mat('#718151'));const leaf=orb(g,lx,.85+random()*.25,lz,.07,.19,.025,mat(i%2?'#778c56':'#9aa369'));leaf.rotation.z=-lx*2;leaf.rotation.y=a;}return g;}
@@ -41,8 +42,8 @@ function pot(parent:THREE.Object3D,x:number,y:number,z:number,scale=.5){const g=
 function aboutDoor(surface:THREE.Object3D,root:THREE.Object3D){
   box(surface,1.93,3.73,.14,0,1.915,0,ivory,.03);
   panel(surface,1.53,1.46,0,2.8,ivory);panel(surface,1.53,1.45,0,1.03,ivory);
-  for(let i=0;i<25;i++){const x=i%2?-.92:.92;box(surface,.018+random()*.04,.035+random()*.12,.007,x,.1+random()*3.6,.075,mat('#b39d7a'),.003);}
-  label(surface,'About',1.15,.48,-.05,3.31,.143,{color:'#ae6956',font:'600 83px HDSCaveat,cursive',width:512,height:180,rotate:-.05});
+  for(let i=0;i<8;i++){const x=i%2?-.92:.92;box(surface,.018+random()*.04,.035+random()*.12,.007,x,.1+random()*3.6,.075,mat('#b39d7a'),.003);}
+  label(surface,'About',1.15,.48,-.05,3.31,.143,{color:'#774c65',font:'600 83px HDSCaveat,cursive',width:512,height:180,rotate:-.05});
   decal(surface,sticker('dragon'),.51,.59,-.43,2.7,.147,.14);
   decal(surface,sticker('pirate'),.59,.68,.30,2.53,.15,-.1);
   decal(surface,sticker('conan'),.49,.56,-.32,1.94,.153,-.10);
@@ -64,14 +65,14 @@ function aboutDoor(surface:THREE.Object3D,root:THREE.Object3D){
 function officeDoor(surface:THREE.Object3D,root:THREE.Object3D){
   box(surface,1.93,3.73,.14,0,1.915,0,officeWood,.025);
   box(surface,1.58,2.18,.035,0,2.47,.085,mat('#6f6a51'),.015);
-  const glass=new THREE.MeshPhysicalMaterial({color:'#b6c1b2',roughness:.75,metalness:.03,clearcoat:.25});box(surface,1.43,2.02,.04,0,2.47,.11,glass,.02);
+  const glass=new THREE.MeshPhysicalMaterial({color:'#b4c2c0',roughness:.75,metalness:.03,clearcoat:.25});box(surface,1.43,2.02,.04,0,2.47,.11,glass,.02);
   // Fine fluting and a muted inset evoke a frosted study door.
-  for(let i=0;i<25;i++)box(surface,.008,1.96,.004,-.68+i*.056,2.47,.134,mat(i%2?'#c0c7b6':'#aab8ab'),.001);
-  label(surface,'WORK',1.03,.24,0,2.65,.151,{font:'500 51px Georgia',color:'#48594e'});
+  for(let i=0;i<13;i++)box(surface,.008,1.96,.004,-.66+i*.11,2.47,.134,mat(i%2?'#c0c7b6':'#aab8ab'),.001);
+  label(surface,'WORK',1.03,.24,0,2.65,.151,{font:'600 51px HDSBody',color:'#48594e'});
   label(surface,'HASSAN',.72,.13,0,2.37,.151,{font:'25px sans-serif',color:'#667466'});
   box(surface,.54,.013,.006,0,2.5,.15,mat('#8b9b87'),.001);
   panel(surface,1.46,.67,0,.64,officeWood);
-  box(surface,.12,.36,.04,.73,1.36,.13,darkBrass,.016);box(surface,.25,.044,.07,.66,1.39,.23,brass,.018);
+  box(surface,.12,.36,.04,.73,1.36,.13,darkBrass,.016);const lever=new THREE.Group();lever.position.set(.73,1.39,.23);surface.add(lever);handles.push(lever);box(lever,.25,.044,.07,-.07,0,0,brass,.018);
   hinge(surface);
   const plaque=box(root,1.07,.26,.04,0,3.98,.24,mat('#c0a471'),.025);label(plaque,'THE STUDY',.84,.13,0,0,.026,{font:'28px sans-serif',color:'#5b513d'});
   const matMesh=box(root,1.38,.026,.62,0,.032,.62,mat('#a89e7e'),.025);label(matMesh,'good things take work',1.13,.25,0,.018,.015,{font:'28px HDSCaveat,cursive',color:'#6e6956'}).rotation.x=-Math.PI/2;
@@ -80,16 +81,16 @@ function officeDoor(surface:THREE.Object3D,root:THREE.Object3D){
 function libraryDoor(surface:THREE.Object3D,root:THREE.Object3D){
   box(surface,1.92,3.73,.14,0,1.915,-.17,walnut,.02);
   for(const x of [-.89,.89])box(surface,.15,3.73,.52,x,1.915,.03,walnut,.018);
-  for(const y of [.13,.94,1.82,2.7,3.76]){box(surface,1.92,.105,.55,0,y,.04,walnut,.018);box(surface,1.94,.045,.06,0,y+.005,.33,wood('#9b724b'),.01);}
+  for(const y of [.13,1.34,2.55,3.76]){box(surface,1.92,.105,.55,0,y,.04,walnut,.018);box(surface,1.94,.045,.06,0,y+.005,.33,wood('#9b724b'),.01);}
   let n=0;
-  for(let row=0;row<4;row++){
-    let x=-.72;const y=[.20,1.005,1.885,2.765][row];
-    const entries=row===0?5:row===1?5:row===2?5:4;
+  for(let row=0;row<3;row++){
+    let x=-.72;const y=[.20,1.405,2.615][row];
+    const entries=5;
     for(let i=0;i<entries;i++){
-      const chosen=books[n%6];const desc=n++<6?chosen:{...chosen,title:'',author:''},w=.16+random()*.10,h=.48+random()*.20;
+      const chosen=books[n%6];const desc=n++<6?chosen:{...chosen,title:'',author:''},w=.18+random()*.08,h=.72+random()*.25;
       book(surface,desc,w,h,x+w/2,y,.16,i===entries-1?-.08:0);x+=w+.035;
     }
-    if(row===3){const small=pot(surface,.56,y,.10,.43);small.rotation.y=.2;}
+
   }
   // Small library plaque, tucked into the cornice rather than covering the books.
   box(root,1.16,.28,.07,0,3.99,.25,wood('#a78352'),.025);label(root,'LIBRARY',.97,.16,0,3.99,.292,{font:'39px Georgia',color:'#f3dfb3'});
@@ -100,7 +101,7 @@ function libraryDoor(surface:THREE.Object3D,root:THREE.Object3D){
 }
 
 function gardenDoor(surface:THREE.Object3D,root:THREE.Object3D,leaves:Leaf[]){
-  const glass=new THREE.MeshPhysicalMaterial({color:'#c6d4af',roughness:.18,metalness:.02,transparent:true,opacity:.26,clearcoat:1,depthWrite:false});
+  const glass=new THREE.MeshPhysicalMaterial({color:'#b4c8aa',roughness:.18,metalness:.02,transparent:true,opacity:.26,clearcoat:1,depthWrite:false});
   for(const x of [-.89,.89])box(surface,.15,3.73,.16,x,1.915,0,sage,.022);
   for(const y of [.13,1.04,3.73])box(surface,1.92,y===1.04?.12:.18,.16,0,y,0,sage,.02);
   box(surface,1.69,.76,.13,0,.58,0,sage,.022);panel(surface,1.4,.51,0,.58,sage);
@@ -112,24 +113,24 @@ function gardenDoor(surface:THREE.Object3D,root:THREE.Object3D,leaves:Leaf[]){
   knob(surface,.75,1.22);hinge(surface);
   const sign=box(surface,.82,.24,.04,-.05,.59,.13,wood('#bbbd93'),.025);label(sign,'garden',.71,.18,0,0,.024,{font:'52px HDSCaveat,cursive',color:'#4f6548'});
   // Climbing stems belong to the fixed frame, so the leaf can open freely.
-  for(const side of [-1]){
-    const pts=[];for(let i=0;i<7;i++)pts.push([side*(1.12+Math.sin(i*.9)*.08),.6+i*.48,.12+Math.cos(i)*.04]);
+  for(const side of [1]){
+    const pts=[];for(let i=0;i<5;i++)pts.push([side*(1.12+Math.sin(i*.9)*.08),2.2+i*.43,.12+Math.cos(i)*.04]);
     line(root,pts,.018,mat('#6f8051'));
-    for(let i=0;i<9;i++){
-      const y=.65+i*.34,x=side*(1.13+Math.sin(y*2)*.08);const leaf=orb(root,x+Math.sin(i*3)*.11,y,.18,.065,.14,.022,mat(['#748954','#8c9a61','#abb17a'][i%3]));leaf.rotation.z=side*(i%2?.6:-.9);leaf.rotation.y=Math.sin(i)*.5;leaves.push({mesh:leaf,base:leaf.rotation.z,phase:i});
+    for(let i=0;i<6;i++){
+      const y=2.25+i*.28,x=side*(1.13+Math.sin(y*2)*.08);const leaf=orb(root,x+Math.sin(i*3)*.11,y,.18,.065,.14,.022,mat(['#748954','#8c9a61','#abb17a'][i%3]));leaf.rotation.z=side*(i%2?.6:-.9);leaf.rotation.y=Math.sin(i)*.5;leaves.push({mesh:leaf,base:leaf.rotation.z,phase:i});
     }
   }
-  pot(root,1.42,.04,.36,.72);
+  pot(root,-1.36,.04,.36,.58);
 }
 
 function room(root:THREE.Object3D,index:number){
   const g=new THREE.Group();root.add(g);
-  const walls=[mat('#d1ad87'),mat('#c0c5ae'),mat('#9a7249'),mat('#9cac7d')][index];
+  const walls=[mat('#d1ad87'),mat('#c0c5ae'),mat('#9a7249'),mat('#254344')][index];
   box(g,1.96,3.75,.12,0,1.92,-1.12,walls,.005);
   box(g,.08,3.75,1.1,-.94,1.92,-.57,walls,.005);box(g,.08,3.75,1.1,.94,1.92,-.57,walls,.005);
   box(g,1.96,.08,1.18,0,.06,-.55,wood(index===3?'#8d986b':'#a38155'),.005);
   box(g,1.96,.08,1.18,0,3.77,-.55,walls,.005);
-  const glow=new THREE.PointLight(['#ffbd7c','#fff1cb','#ffbd69','#dcf3ac'][index],index===2?3:index===3?.8:1.4,4,2);glow.position.set(0,2.9,-.3);g.add(glow);
+  const glow=new THREE.PointLight(['#ffbd7c','#fff1cb','#ffbd69','#b4c8aa'][index],index===2?3:index===3?.8:1.4,4,2);glow.position.set(0,2.9,-.3);g.add(glow);
   if(index===0){
     box(g,1.16,.66,.04,-.11,2.7,-1.03,mat('#9b7861'),.02);
     const notes:[string,number,number][]=[['#e4c56b',-.41,2.86],['#c0cfb3',-.04,2.8],['#dca797',.3,2.59],['#ece0bb',-.36,2.55]];
@@ -152,11 +153,16 @@ function room(root:THREE.Object3D,index:number){
     for(let i=0;i<14;i++){const rain=box(g,.008,.065,.004,-.08+random()*.65,2.4+random()*.65,-.983,mat('#b8c3b9'),.001);rain.rotation.z=-.15;}
     cyl(g,.18,.18,.035,-.42,.67,-.13,walnut);cyl(g,.025,.025,.56,-.42,.36,-.13,darkBrass);cyl(g,.055,.045,.08,-.42,.73,-.13,cream);
   }else{
-    const sky=box(g,1.79,3.5,.01,0,1.95,-1.047,mat('#bbc5a2'));(sky.material as THREE.MeshStandardMaterial).map=paper('#bbc5a2');
-    for(let i=0;i<4;i++){const x=-.66+i*.44,y=2.55+Math.sin(i*1.7)*.3;box(g,.035,2.25,.035,x,1.4,-.92,mat('#7a8060'));for(let j=0;j<2;j++)orb(g,x+Math.sin(j*2)*.10,y+j*.19,-.91,.24,.44,.06,mat(['#8c9e73','#a3b181','#7b956b'][(i+j)%3]));}
-    for(let i=0;i<13;i++){const leaf=orb(g,(random()-.5)*1.55,.23+random()*.35,-.25-random()*.6,.10,.22,.04,mat(i%2?'#718953':'#9aa76e'));leaf.rotation.z=random()-.5;}
-    for(let i=0;i<5;i++){const stone=orb(g,-.15+Math.sin(i*.8)*.23,.12,-.15-i*.16,.14,.025,.11,mat('#c4bf9d'));stone.rotation.y=i;}
-    const pond=cyl(g,.27,.27,.013,.52,.11,-.44,new THREE.MeshPhysicalMaterial({color:'#9daea0',metalness:.25,roughness:.2,clearcoat:1}));pond.scale.z=.7;
+    const skyMaterial=new THREE.MeshStandardMaterial({map:paper('#172f30'),roughness:1,emissive:'#172f30',emissiveIntensity:1.1});
+    box(g,1.79,3.5,.01,0,1.95,-1.047,skyMaterial);
+    // A quiet pond and a few reeds, rather than a miniature forest.
+    for(let i=0;i<6;i++){
+      const x=(i<3?-.65:.59)+(i%3)*.07;
+      line(g,[[x,.12,-.75],[x-.04,.65,-.76],[x+.06,1.2+(i%3)*.14,-.8]],.012,mat('#617a65'));
+    }
+    const pond=box(g,1.5,.025,.73,0,.115,-.58,new THREE.MeshPhysicalMaterial({color:'#254344',emissive:'#254344',emissiveIntensity:.5,metalness:.15,roughness:.24,clearcoat:.6}),.01);
+    pond.rotation.y=.03;
+    for(const [x,y] of [[-.48,2.3],[.32,1.9],[.61,2.8]])orb(g,x,y,-.94,.025,.025,.018,new THREE.MeshStandardMaterial({color:'#ded08a',emissive:'#ded08a',emissiveIntensity:.65}));
   }
   return g;
 }
@@ -166,17 +172,22 @@ function room(root:THREE.Object3D,index:number){
   const leaves:Leaf[]=[];const interior=room(root,index);frame(root,[ivory,officeWood,walnut,sage][index],index);
   const pivot=new THREE.Group();pivot.position.set(-.96,0,.16);root.add(pivot);const surface=new THREE.Group();surface.position.x=.96;pivot.add(surface);
   [aboutDoor,officeDoor,libraryDoor,gardenDoor][index](surface,root,leaves);
+  if(index===0 || index===2){
+    const spill=box(root,1.74,.018,.06,0,.058,.19,new THREE.MeshStandardMaterial({color:'#cba363',emissive:'#cba363',emissiveIntensity:.45,roughness:1}),.004);
+    spill.name='threshold-light';spill.castShadow=false;
+  }
   root.traverse(obj=>{obj.userData.door=index;});
   return {
     root,pivot,interior,leaves,angle:0,target:0,hover:0,index,
     update(dt:number,time:number,reduced:boolean){
-      // A small inviting crack at the hinge; fully opened doors keep their angle.
+      // Restore the gentle inviting crack on hover; explicit opening takes precedence.
       const target=this.target>0?this.target:(!reduced && this.hover ? .045 : 0);
       const rate=reduced?1:1-Math.exp(-dt*6);
       this.angle=THREE.MathUtils.lerp(this.angle,target,rate);
       if(Math.abs(this.angle-target)<.0002)this.angle=target;
       pivot.rotation.y=-this.angle;
-      for(const leaf of leaves)leaf.mesh.rotation.z=leaf.base+(reduced?0:Math.sin(time*.8+leaf.phase)*.035);
+      for(const handle of handles)handle.rotation.z=THREE.MathUtils.lerp(handle.rotation.z,!reduced && this.hover ? -.07 : 0,reduced?1:1-Math.exp(-dt*14));
+      for(const leaf of leaves)leaf.mesh.rotation.z=leaf.base+(reduced || !this.hover?0:Math.sin(time*.8+leaf.phase)*.012);
     },
   };
 }

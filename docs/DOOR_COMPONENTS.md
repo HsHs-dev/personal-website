@@ -84,7 +84,8 @@ Prefer one gallery over four separate `Door` components on the same screen: the 
 | `mood` | Controlled `day` or `night`. On `DoorEntrance`, pair with `onMoodChange` to keep the toggle functional. |
 | `initialMood` | Initial uncontrolled mood on `DoorEntrance`; defaults to `night`. |
 | `reducedMotion` | Omit to follow the OS preference. `true` replaces camera travel with a brief fade. |
-| `sound` | Optional quiet door sound. Off by default. The entrance toolbar can enable it when uncontrolled. |
+| `sound` | Enables `onDoorSound` when supplied; off by default. Built-in synthesized tones have been removed to follow the environmental-only sound direction. |
+| `onDoorSound(door)` | Optional host callback for an already licensed environmental sound. The sound toggle appears only when this callback exists. |
 | `maxPixelRatio` | Resolution cap, default `1.8`; try `1.25` on constrained devices. |
 | `resetKey` | Change this value to reset a gallery that stays mounted across navigation. |
 | `onError(error)` | Optional reporting hook for graphics or navigation errors. |
@@ -116,9 +117,24 @@ Treat this folder as your project's source going forward. Change the canvas draw
 
 ```sh
 npm run build
-node --test tests/doors-transition.test.mjs
+npm run lint
+npm test
+npm run test:doors
 ```
 
 The build type-checks the components. Tests cover entry ordering, the opaque navigation boundary, reduced motion, and monotonic progress. The preview mounts under React Strict Mode and has been checked for entering, returning, cancelling, day/night and mobile layout.
 
 The earlier workshop's `scripts/export-door-models.mjs` is a snapshot exporter. Rerunning it overwrites `art/models.ts` and `art/textures.ts`; it is not needed to use or maintain these components.
+
+
+## Design-system refinement — 17 November 2026
+
+The reusable components now follow the new paper/ink and dusk/moon palette, with locally hosted Fraunces and Instrument Sans. A small Caveat subset is retained solely for the existing illustrated crayon lettering; HTML controls use Instrument Sans. Total referenced fonts are about 166KB. Older font files are retained but no longer referenced.
+
+The four doors sit against a solid background with soft ground shadows, less busy wood grain, and a more frontal camera. The experimental plaster bays and baseboard were removed at Hassan’s request. About retains its three principal childhood stickers and fewer height/wear marks. Work has quieter fluted glass and sans-serif lettering. Library has three shelves and fifteen books. Garden has six upper-right vine leaves, one small pot, and a dark pond/reed glimpse.
+
+Hover gently cracks doors open (0.045 radians) and moves the handle slightly; reduced motion keeps the panel closed; full opening remains an explicit preview/entry action. Entry takes 1.1 seconds (100ms for reduced motion), with a destination-colored opaque veil. The host still owns routing and the destination reveal. Day/night lighting blends over 600ms; reduced motion switches it immediately. Four doors use two rows through 1000px to protect label spacing on tablets. Mobile rendering caps pixel ratio at 1.5.
+
+`npm run test:doors` uses Playwright and installed Google Chrome (`channel: chrome`), starts a separate Vite server on port 5176, and writes failure artifacts to the OS temporary directory. Install Chrome on a new machine before running it. The suite exercises navigation through all four doors, focus, return, cancellation, peek mode, responsive labels, reduced motion, single-door use, WebGL failure, and isolation from the main homepage. No scene screenshot test substitutes for checking the actual art.
+
+Environmental audio files remain the host application's responsibility: consult [the audio manifest](design-system/AUDIO.md). A `sound` prop without `onDoorSound` is intentionally silent. No new room pages or homepage replacement are included in this refinement.

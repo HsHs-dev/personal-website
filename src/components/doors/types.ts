@@ -17,7 +17,9 @@ export interface DoorGalleryProps {
   onError?: (error: Error) => void;
   /** Undefined follows the visitor's system setting. */
   reducedMotion?: boolean;
+  /** Enables the optional host-provided environmental sound callback. No synthesized tones. */
   sound?: boolean;
+  onDoorSound?: (door: DoorId) => void;
   maxPixelRatio?: number;
   /** Change to restore the closed gallery when keeping it mounted across routes. */
   resetKey?: string | number;

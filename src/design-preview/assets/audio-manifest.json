@@ -1,0 +1,32 @@
+[
+  {
+    "id": "stream",
+    "author": "SamuelGremaud",
+    "source": "https://freesound.org/people/SamuelGremaud/sounds/437063/",
+    "download": "https://cdn.freesound.org/previews/437/437063_8031303-lq.mp3",
+    "license": "CC0-1.0",
+    "date": "2026-11-17",
+    "sha256": "2d12f787f1a1ad8a4e63388405e2110c40f3c2d0e1ddaf634f77397e2376e7ff",
+    "edits": "Unedited preview-quality source; playback gain reduced. Audition candidate, not final loop master."
+  },
+  {
+    "id": "fireplace",
+    "author": "ceich93",
+    "source": "https://freesound.org/people/ceich93/sounds/263864/",
+    "download": "https://cdn.freesound.org/previews/263/263864_4457609-lq.mp3",
+    "license": "CC0-1.0",
+    "date": "2026-11-18",
+    "sha256": "d4173351601ca3992f15b8add11f20b074c3442b9125e5cf746c069ee0a4fb59",
+    "edits": "Local recording preview; playback gain reduced."
+  },
+  {
+    "id": "trees",
+    "author": "moreliketrees",
+    "source": "https://freesound.org/people/moreliketrees/sounds/858679/",
+    "download": "https://cdn.freesound.org/previews/858/858679_3736657-lq.mp3",
+    "license": "CC0-1.0",
+    "date": "2026-11-18",
+    "sha256": "e25d58b309fd2407c087445ea786747c19e51b40ae43eb2239c54df2633a8ef0",
+    "edits": "Local recording preview; playback gain reduced."
+  }
+]
