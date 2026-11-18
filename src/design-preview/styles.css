@@ -1,4 +1,5 @@
 /* The preview owns its page reset; reusable door components remain scoped. */
+/* Interaction and typography refinements are scoped to the preview. */
 html{scroll-behavior:auto}body{margin:0}button,input,select{font:inherit}button,a,input,select,summary{-webkit-tap-highlight-color:transparent}button,summary{cursor:pointer}button:disabled{cursor:not-allowed}svg{flex-shrink:0}*{box-sizing:border-box}
 .dp-app{--dp-bg:#eee6d7;--dp-surface:#f4ecdd;--dp-ink:#343b39;--dp-muted:#62655d;--dp-accent:#355e5b;--dp-on-accent:#f4ecdd;--dp-line:color-mix(in srgb,var(--dp-ink) 18%,transparent);--dp-display:HDSLora,Georgia,serif;--dp-body:HDSBody,system-ui,sans-serif;min-height:100svh;background:var(--dp-bg);color:var(--dp-ink);font:400 18px/1.65 var(--dp-body);transition:background-color .6s,color .6s}
 .theme-night{--dp-bg:#202e38;--dp-surface:#2d3d46;--dp-ink:#d9e2dc;--dp-muted:#b4c2c0;--dp-accent:#ded08a;--dp-on-accent:#202e38}
@@ -30,3 +31,44 @@ html{scroll-behavior:auto}body{margin:0}button,input,select{font:inherit}button,
 @media(max-width:760px){.dp-article-layout{grid-template-columns:minmax(0,1fr)}}
 
 .dp-app[data-reduced=true]{transition:none!important}@media(prefers-reduced-motion:reduce){.dp-app{transition:none!important}}
+/* More distinct room voices: marker notebook, technical desk, book serif, soft garden sans. */
+.theme-about{--dp-display:'Shantell Sans',cursive}
+.theme-about h1{line-height:1.18;letter-spacing:-.025em;font-weight:600}
+.theme-about h2,.theme-about h3{line-height:1.3;letter-spacing:-.025em}
+.dp-handwritten{font-family:'Shantell Sans',cursive!important;font-size:23px!important;line-height:1.5!important;letter-spacing:-.025em}
+.theme-garden{--dp-display:'Bricolage Grotesque',sans-serif}
+.theme-garden h1,.theme-garden h2,.theme-garden h3{font-variation-settings:'wdth' 100,'opsz' 48}
+/* Each icon answers its own action, on keyboard focus as well as pointer hover. */
+.dp-icon{overflow:visible;transform-origin:center;transition:transform 220ms cubic-bezier(.2,.8,.3,1.4)}
+.dp-icon path,.dp-icon circle{transform-box:fill-box;transform-origin:center;transition:transform 280ms cubic-bezier(.2,.8,.3,1.4),opacity 180ms}
+:is(button,a,summary):is(:hover,:focus-visible)>.icon-search{transform:rotate(-14deg)}
+:is(button,a):is(:hover,:focus-visible) .icon-lens{transform:scale(1.12)}
+:is(button,a):is(:hover,:focus-visible) .icon-handle{transform:translate(1px,1px)}
+:is(button,a):is(:hover,:focus-visible) .icon-slider-one{transform:translateX(7px)}
+:is(button,a):is(:hover,:focus-visible) .icon-slider-two{transform:translateX(-7px)}
+:is(button,a):is(:hover,:focus-visible)>.icon-sun{transform:rotate(45deg) scale(1.12)}
+:is(button,a):is(:hover,:focus-visible)>.icon-moon{transform:rotate(-22deg)}
+:is(button,a):is(:hover,:focus-visible)>.icon-arrow{transform:translateX(4px)}
+:is(button,a):is(:hover,:focus-visible)>.icon-contact{transform:rotate(-8deg) translateY(-2px)}
+:is(button,a):is(:hover,:focus-visible)>.icon-home{transform:perspective(60px) rotateY(-20deg)}
+:is(button,a):is(:hover,:focus-visible)>.icon-copy{transform:rotate(8deg)}
+:is(button,a):is(:hover,:focus-visible)>.icon-close{transform:rotate(90deg)}
+:is(button,a):is(:hover,:focus-visible)>.icon-garden,:is(button,a):is(:hover,:focus-visible)>.icon-seed{transform:rotate(-12deg) scale(1.08)}
+[aria-pressed=false]>.icon-sound .icon-wave-one,[aria-pressed=false]>.icon-sound .icon-wave-two{opacity:.25;transform:scaleX(.8)}
+:is(button,a):is(:hover,:focus-visible)>.icon-sound .icon-wave-one{animation:dp-sound-wave .65s ease-out}
+:is(button,a):is(:hover,:focus-visible)>.icon-sound .icon-wave-two{animation:dp-sound-wave .65s .1s ease-out}
+.dp-header button:active .dp-icon,.dp-header a:active .dp-icon{transform:scale(.87)}
+@keyframes dp-sound-wave{0%,100%{opacity:.5}50%{opacity:1;transform:translateX(1px)}}
+.dp-arrival-door{width:160px;height:160px;margin:0 auto 24px;perspective:400px}
+.dp-arrival-door svg{width:100%;height:100%;overflow:visible}
+.arrival-frame,.arrival-step{fill:none;stroke:var(--dp-accent);stroke-width:3;stroke-linecap:round}
+.arrival-light{fill:#cba363;opacity:.15;animation:dp-arrival-glow 3s ease-in-out infinite}
+.arrival-leaf{transform-origin:48px 80px;animation:dp-arrival-open 3s cubic-bezier(.4,0,.2,1) infinite}
+.arrival-leaf path{fill:var(--dp-surface);stroke:var(--dp-accent);stroke-width:2}
+.arrival-leaf circle{fill:var(--dp-accent)}
+@keyframes dp-arrival-open{0%,15%,100%{transform:perspective(180px) rotateY(0)}50%,75%{transform:perspective(180px) rotateY(-58deg)}}
+@keyframes dp-arrival-glow{0%,15%,100%{opacity:.08}50%,75%{opacity:.4}}
+.dp-app[data-paused=true] .arrival-leaf,.dp-app[data-paused=true] .arrival-light{animation:none}
+.dp-app[data-reduced=true] .dp-icon,.dp-app[data-reduced=true] .dp-icon *{transform:none!important;animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){.dp-icon,.dp-icon *{transform:none!important;animation:none!important;transition:none!important}}
+.dp-app:not([data-reduced=true]):not([data-paused=true]) .hds-loading-door:after{animation:hds-knock 2.4s ease-in-out infinite;opacity:.6}

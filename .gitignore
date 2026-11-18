@@ -16,6 +16,12 @@ dist-ssr
 /docs/STORY.md
 /docs/JOURNEY.md
 /docs/*
+!/docs/DESIGN_SYSTEM.md
+!/docs/DESIGN_PREVIEW.md
+!/docs/design-system/
+!/docs/design-frames/
+/docs/design-frames/*
+!/docs/design-frames/README.md
 
 # Editor directories and files
 .vscode/*

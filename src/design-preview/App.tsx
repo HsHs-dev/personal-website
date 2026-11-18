@@ -5,8 +5,9 @@ import { useSystemReducedMotion } from '../components/doors/useSystemReducedMoti
 import { Icon } from './Scenes';
 import { pageIndex, rooms, routeHref } from './content';
 import { AboutPage, AccessibilityPage, BookPage, Colophon, ContactPage, ErrorPage, GardenPage, LibraryPage, LoadingPage, NotePage, NotFound, ProjectPage, SearchPage, SystemPage, WorkPage } from './Pages';
-import breeze from './assets/breeze.mp3';
-import rain from './assets/rain.mp3';
+import breeze from './assets/trees.mp3';
+import { useInteractionAudio } from './useInteractionAudio';
+import fireplace from './assets/fireplace.mp3';
 import stream from './assets/stream.mp3';
 import './fonts.css';
 import './styles.css';
@@ -23,6 +24,7 @@ export function DesignPreview() {
   const [prefs,setPrefs]=useState<Preferences>(()=>read('hds-design-preferences',{motion:'system',paused:false,paper:false,volume:.5}));
   const [sound,setSound]=useState(false),[soundError,setSoundError]=useState('');
   const [inspect,setInspect]=useState(false);
+  const playCue = useInteractionAudio(sound, prefs.volume);
   const systemReduced=useSystemReducedMotion();
   const reduced=prefs.motion==='reduced'||systemReduced;
   const preferenceDialog=useRef<HTMLDialogElement>(null),indexDialog=useRef<HTMLDialogElement>(null),main=useRef<HTMLElement>(null);
@@ -38,7 +40,7 @@ export function DesignPreview() {
     return()=>cancelAnimationFrame(frame);
   },[route]);
   useEffect(()=>{try{localStorage.setItem('hds-design-mood',JSON.stringify(mood));localStorage.setItem('hds-design-preferences',JSON.stringify(prefs));}catch{/* Preferences still work when storage is blocked. */}},[mood,prefs]);
-  const source=!path||room==='about'?breeze:room==='library'?rain:room==='garden'?stream:null;
+  const source=!path||room==='about'?breeze:room==='library'?fireplace:room==='garden'?stream:null;
   useEffect(()=>{
     if(!sound||!source)return;
     const player=new Audio(source);audio.current=player;player.loop=true;player.volume=0;
@@ -55,9 +57,9 @@ export function DesignPreview() {
   },[prefs.volume,source,sound,room,mood,path,parts.length]);
 
   function showPreferences(){preferenceDialog.current?.showModal();}
-  function toggleSound(){setSoundError('');setSound(!sound);}
+  function toggleSound(){setSoundError('');if(!sound)playCue('release',0,true);setSound(!sound);}
   function page(){
-    if(!path)return <><DoorEntrance mood={mood} onMoodChange={setMood} showControls={false} reducedMotion={reduced||prefs.paused} key={mode} interaction={mode} doors={single&&DOOR_IDS.includes(single)?[single]:undefined} onEnter={id=>{window.location.hash=id;}}/><div className="dp-home-shortcut"><p>Here for my work?</p><a className="dp-text-link" href="#work">Go straight to selected projects <Icon name="arrow" size={18}/></a></div></>;
+    if(!path)return <><DoorEntrance mood={mood} onMoodChange={setMood} showControls={false} sound={sound} onDoorSound={id=>playCue('door',DOOR_IDS.indexOf(id))} reducedMotion={reduced||prefs.paused} key={mode} interaction={mode} doors={single&&DOOR_IDS.includes(single)?[single]:undefined} onEnter={id=>{window.location.hash=id;}}/><div className="dp-home-shortcut"><p>Here for my work?</p><a className="dp-text-link" href="#work">Go straight to selected projects <Icon name="arrow" size={18}/></a></div></>;
     if(path==='about')return <AboutPage/>;
     if(path==='work')return <WorkPage/>;
     if(room==='work'&&parts.length===2)return <ProjectPage slug={parts[1]}/>;
@@ -75,13 +77,23 @@ export function DesignPreview() {
     if(path==='error')return <ErrorPage/>;
     return <NotFound/>;
   }
-  return <div className={`dp-app theme-${theme} ${inspect?'dp-inspect':''}`} data-reduced={reduced} data-paused={prefs.paused} data-paper={prefs.paper}>
+  return <div className={`dp-app theme-${theme} ${inspect?'dp-inspect':''}`} onPointerOver={event=>{
+      if(event.pointerType==='touch')return;
+      const control=(event.target as Element).closest('button,a,summary');
+      if(control && !control.contains(event.relatedTarget as Node|null) && !control.matches(':disabled'))playCue('hover');
+    }} onPointerDown={event=>{
+      const control=(event.target as Element).closest('button,a,summary,input[type=checkbox]');
+      if(control && !control.matches(':disabled,.hds-label,[aria-label="Environmental sound"]'))playCue('press');
+    }} onClickCapture={event=>{
+      const control=(event.target as Element).closest('button,a,summary,input[type=checkbox]');
+      if(control && !control.matches(':disabled,.hds-label,[aria-label="Environmental sound"]'))playCue('release');
+    }} data-reduced={reduced} data-paused={prefs.paused} data-paper={prefs.paper}>
     <a className="dp-skip" href="#" onClick={e=>{e.preventDefault();main.current?.focus();}}>Skip to content</a>
     <div className="dp-preview-bar"><span><i/> HASSAN’S DIGITAL SPACE <b>/ DESIGN EDITION 01</b></span><div><button onClick={()=>indexDialog.current?.showModal()}>All pages <span>↗</span></button><a href="#system">Design system</a><button aria-pressed={inspect} onClick={()=>setInspect(!inspect)}>Inspect {inspect?'on':'off'}</button>{!path&&<><button aria-pressed={mode==='enter'} onClick={()=>setMode('enter')}>Enter a page</button><button aria-pressed={mode==='preview'} onClick={()=>setMode('preview')}>Peek inside</button></>}</div></div>
     <header className="dp-header"><a href="#" className="dp-wordmark" aria-label="Back to the house"><Icon name="home"/><span>Hassan’s<span className="wordmark-second"> digital space</span></span></a><nav aria-label="Main navigation"><details className="dp-room-menu" onKeyDown={e=>{if(e.key==='Escape'){e.currentTarget.open=false;e.currentTarget.querySelector('summary')?.focus();}}}><summary>Rooms <span aria-hidden="true">⌄</span></summary><div>{rooms.map(r=><a key={r.id} href={routeHref('/'+r.id)} aria-current={room===r.id?'page':undefined}><Icon name={r.id}/><span>{r.name}<small>{r.caption}</small></span><span>{r.number}</span></a>)}<a href="#contact"><Icon name="contact"/>Contact</a></div></details><a className="dp-header-direct" href="#work" aria-current={room==='work'?'page':undefined}>Work</a><a className="dp-header-direct" href="#contact">Contact</a><a href="#search" aria-label="Search the house"><Icon name="search"/></a>{!path&&<button aria-label="Night mood" aria-pressed={mood==='night'} onClick={()=>setMood(mood==='night'?'day':'night')}><Icon name={mood==='night'?'moon':'sun'}/><span>{mood==='night'?'Night':'Day'}</span></button>}<button aria-label="Environmental sound" aria-pressed={sound} onClick={toggleSound}><Icon name="sound"/><span className="dp-header-sound">{sound?'On':'Off'}</span></button><button aria-label="Preferences" onClick={showPreferences}><Icon name="settings"/></button></nav></header>
     <main ref={main} tabIndex={-1} key={route} className={`dp-main ${path?'door-demo-room':'dp-home'}`} data-room={room} data-mood={mood}>{path&&<div className="dp-breadcrumb"><a href="#">Home</a><span>/</span><span>{room==='system'?'Design system':room.charAt(0).toUpperCase()+room.slice(1)}</span>{parts.length>1&&<><span>/</span><span>{parts[parts.length-1].replaceAll('-',' ')}</span></>}</div>}{page()}</main>
     <footer className="dp-footer"><div><a className="dp-wordmark" href="#"><Icon name="home"/><span>A little home on the internet.</span></a><p>Still growing. Always curious.</p></div><nav aria-label="Footer"><a href="#">Back to the doors</a><a href="#colophon">Colophon</a><a href="#accessibility">Accessibility</a><a href="#contact">Contact</a></nav><span className="dp-meta">Interactive design preview · sample writing is labelled</span></footer>
     <dialog ref={indexDialog} className="dp-dialog dp-index-dialog" aria-labelledby="dp-index-title"><form method="dialog" className="dp-dialog-top"><span className="dp-eyebrow">THE WHOLE HOUSE</span><button aria-label="Close page index"><Icon name="close"/></button></form><h2 id="dp-index-title">Choose a page to explore.</h2><p>Every page and state in the design specification, in one place.</p><div className="dp-page-index">{pageIndex.map(([url,name,desc],i)=><a key={url} href={routeHref(url)} onClick={()=>indexDialog.current?.close()}><span>{String(i+1).padStart(2,'0')}</span><div><strong>{name}</strong><small>{desc}</small></div><Icon name="arrow" size={18}/></a>)}</div></dialog>
-    <dialog ref={preferenceDialog} className="dp-dialog" aria-labelledby="dp-preferences-title"><form method="dialog" className="dp-dialog-top"><span className="dp-eyebrow">MAKE YOURSELF COMFORTABLE</span><button aria-label="Close preferences"><Icon name="close"/></button></form><h2 id="dp-preferences-title">A little more your way.</h2><label className="dp-setting"><span>Environmental sound<small>Off by default. Work and utility pages stay quiet.</small></span><input type="checkbox" checked={sound} onChange={toggleSound}/></label><label className="dp-setting"><span>Volume<small>Quiet field recordings, never music.</small></span><input aria-label="Volume" type="range" min="0" max="1" step=".05" value={prefs.volume} onChange={e=>setPrefs({...prefs,volume:Number(e.target.value)})}/></label>{soundError&&<p role="status">{soundError}</p>}<label className="dp-setting"><span>Motion<small>System reduction is always respected.</small></span><select value={prefs.motion} onChange={e=>setPrefs({...prefs,motion:e.target.value as Preferences['motion']})}><option value="system">Follow system</option><option value="reduced">Reduced</option></select></label><label className="dp-setting"><span>Pause animated scenery<small>Keep the fireflies, water, and doors still.</small></span><input type="checkbox" checked={prefs.paused} onChange={e=>setPrefs({...prefs,paused:e.target.checked})}/></label><label className="dp-setting"><span>Paper reading in Garden<small>A warm paper surface for long entries.</small></span><input type="checkbox" checked={prefs.paper} onChange={e=>setPrefs({...prefs,paper:e.target.checked})}/></label><p className="dp-meta">Audio recordings are preview-quality audition assets. Source and license credits are in the <a href="#colophon" onClick={()=>preferenceDialog.current?.close()}>Colophon</a>.</p></dialog>
+    <dialog ref={preferenceDialog} className="dp-dialog" aria-labelledby="dp-preferences-title"><form method="dialog" className="dp-dialog-top"><span className="dp-eyebrow">MAKE YOURSELF COMFORTABLE</span><button aria-label="Close preferences"><Icon name="close"/></button></form><h2 id="dp-preferences-title">A little more your way.</h2><label className="dp-setting"><span>Environmental sound<small>Off by default. Includes button and door feedback.</small></span><input type="checkbox" checked={sound} onChange={toggleSound}/></label><label className="dp-setting"><span>Volume<small>Ambience and interaction effects, never music.</small></span><input aria-label="Volume" type="range" min="0" max="1" step=".05" value={prefs.volume} onChange={e=>setPrefs({...prefs,volume:Number(e.target.value)})}/></label>{soundError&&<p role="status">{soundError}</p>}<label className="dp-setting"><span>Motion<small>System reduction is always respected.</small></span><select value={prefs.motion} onChange={e=>setPrefs({...prefs,motion:e.target.value as Preferences['motion']})}><option value="system">Follow system</option><option value="reduced">Reduced</option></select></label><label className="dp-setting"><span>Pause animated scenery<small>Keep the fireflies, water, and doors still.</small></span><input type="checkbox" checked={prefs.paused} onChange={e=>setPrefs({...prefs,paused:e.target.checked})}/></label><label className="dp-setting"><span>Paper reading in Garden<small>A warm paper surface for long entries.</small></span><input type="checkbox" checked={prefs.paper} onChange={e=>setPrefs({...prefs,paper:e.target.checked})}/></label><p className="dp-meta">Audio recordings are preview-quality audition assets. Source and license credits are in the <a href="#colophon" onClick={()=>preferenceDialog.current?.close()}>Colophon</a>.</p></dialog>
   </div>;
 }

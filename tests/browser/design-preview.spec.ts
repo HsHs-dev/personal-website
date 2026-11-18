@@ -85,3 +85,36 @@ test('audio is not requested before opt-in and contact copying reports success',
   await expect(page.getByRole('button',{name:'Copied',exact:true})).toBeVisible();
   expect(await page.evaluate(()=>navigator.clipboard.readText())).toBe('officialhassansmail@gmail.com');
 });
+
+test('icons and arrival animate, while reduced motion stops both',async({page})=>{
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  await page.goto('/door-preview.html#loading');
+  await expect(page.locator('.arrival-leaf')).toHaveCSS('animation-name','dp-arrival-open');
+  await page.getByRole('button',{name:'Preferences',exact:true}).hover();
+  await expect(page.locator('.icon-slider-one')).not.toHaveCSS('transform','none');
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await expect(page.locator('.arrival-leaf')).toHaveCSS('animation-name','none');
+  await expect(page.locator('.icon-slider-one')).toHaveCSS('transform','none');
+});
+
+test('interaction audio stays silent until enabled and stops when muted',async({page})=>{
+  await page.addInitScript(()=>{
+    const original=AudioContext.prototype.createBufferSource;
+    Object.assign(window,{cueCount:0});
+    AudioContext.prototype.createBufferSource=function(){
+      const state=window as unknown as {cueCount:number};state.cueCount++;
+      return original.call(this);
+    };
+  });
+  await page.goto('/door-preview.html#system');
+  await page.getByRole('button',{name:'Primary action',exact:true}).click();
+  const count=()=>page.evaluate(()=>(window as unknown as {cueCount:number}).cueCount);
+  expect(await count()).toBe(0);
+  await page.getByRole('button',{name:'Environmental sound',exact:true}).click();
+  await page.getByRole('button',{name:'Secondary action',exact:true}).click();
+  expect(await count()).toBeGreaterThan(1);
+  await page.getByRole('button',{name:'Environmental sound',exact:true}).click();
+  const mutedCount=await count();
+  await page.getByRole('button',{name:'Secondary action',exact:true}).click();
+  expect(await count()).toBe(mutedCount);
+});
