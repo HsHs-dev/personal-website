@@ -1,0 +1,102 @@
+{
+  "id": "error",
+  "title": "Load failure",
+  "description": "Recovery state study",
+  "route": "/error",
+  "device": "desktop",
+  "file": "desktop/error.png",
+  "thumbnail": "desktop/error.jpg",
+  "width": 1440,
+  "height": 1071,
+  "live": "http://127.0.0.1:5175/door-preview.html#error",
+  "metrics": {
+    "width": 1440,
+    "height": 1071,
+    "theme": "dp-app theme-utility ",
+    "colors": {
+      "bg": "#eee6d7",
+      "surface": "#f4ecdd",
+      "ink": "#343b39",
+      "muted": "#62655d",
+      "accent": "#355e5b",
+      "on-accent": "#f4ecdd"
+    },
+    "elements": [
+      {
+        "tag": "HEADER",
+        "text": "Hassan’s digital spaceRooms ⌄AboutThe person behind the door01WorkThings I build02LibraryA shelf to ",
+        "x": 60,
+        "y": 0,
+        "width": 1320,
+        "height": 90,
+        "font": "HDSBody, system-ui, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "29.7px",
+        "letterSpacing": "normal",
+        "color": "rgb(52, 59, 57)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "MAIN",
+        "text": "Home/ErrorA TEMPORARY INTERRUPTIONThis room couldn’t load.Your place in the house hasn’t been lost.D",
+        "x": 72,
+        "y": 90,
+        "width": 1296,
+        "height": 794,
+        "font": "HDSBody, system-ui, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "29.7px",
+        "letterSpacing": "normal",
+        "color": "rgb(52, 59, 57)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "H1",
+        "text": "This room couldn’t load.",
+        "x": 441,
+        "y": 347,
+        "width": 558,
+        "height": 58,
+        "font": "HDSLora, Georgia, serif",
+        "fontSize": "52px",
+        "fontWeight": "600",
+        "lineHeight": "58.24px",
+        "letterSpacing": "-1.04px",
+        "color": "rgb(52, 59, 57)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Try again",
+        "x": 576,
+        "y": 615,
+        "width": 109,
+        "height": 46,
+        "font": "HDSBody, system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "lineHeight": "20px",
+        "letterSpacing": "normal",
+        "color": "rgb(244, 236, 221)",
+        "background": "rgb(53, 94, 91)"
+      },
+      {
+        "tag": "FOOTER",
+        "text": "A little home on the internet.Still growing. Always curious.Back to the doorsColophonAccessibilityCo",
+        "x": 72,
+        "y": 884,
+        "width": 1296,
+        "height": 188,
+        "font": "HDSBody, system-ui, sans-serif",
+        "fontSize": "18px",
+        "fontWeight": "400",
+        "lineHeight": "29.7px",
+        "letterSpacing": "normal",
+        "color": "rgb(52, 59, 57)",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ]
+  }
+}

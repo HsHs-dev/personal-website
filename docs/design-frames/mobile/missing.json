@@ -1,0 +1,102 @@
+{
+  "id": "missing",
+  "title": "404",
+  "description": "A door without a room",
+  "route": "/missing",
+  "device": "mobile",
+  "file": "mobile/missing.png",
+  "thumbnail": "mobile/missing.jpg",
+  "width": 390,
+  "height": 1187,
+  "live": "http://127.0.0.1:5175/door-preview.html#missing",
+  "metrics": {
+    "width": 390,
+    "height": 1187,
+    "theme": "dp-app theme-utility ",
+    "colors": {
+      "bg": "#eee6d7",
+      "surface": "#f4ecdd",
+      "ink": "#343b39",
+      "muted": "#62655d",
+      "accent": "#355e5b",
+      "on-accent": "#f4ecdd"
+    },
+    "elements": [
+      {
+        "tag": "HEADER",
+        "text": "Hassan’s digital spaceRooms ⌄AboutThe person behind the door01WorkThings I build02LibraryA shelf to ",
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 73,
+        "font": "HDSBody, system-ui, sans-serif",
+        "fontSize": "17px",
+        "fontWeight": "400",
+        "lineHeight": "28.05px",
+        "letterSpacing": "normal",
+        "color": "rgb(52, 59, 57)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "MAIN",
+        "text": "Home/Missing404A WRONG TURN, PERHAPSThis door doesn’t lead anywhere yet.The page could not be found.",
+        "x": 0,
+        "y": 73,
+        "width": 390,
+        "height": 808,
+        "font": "HDSBody, system-ui, sans-serif",
+        "fontSize": "17px",
+        "fontWeight": "400",
+        "lineHeight": "28.05px",
+        "letterSpacing": "normal",
+        "color": "rgb(52, 59, 57)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "H1",
+        "text": "This door doesn’t lead anywhere yet.",
+        "x": 20,
+        "y": 359,
+        "width": 350,
+        "height": 76,
+        "font": "HDSLora, Georgia, serif",
+        "fontSize": "34px",
+        "fontWeight": "600",
+        "lineHeight": "38.08px",
+        "letterSpacing": "-0.68px",
+        "color": "rgb(52, 59, 57)",
+        "background": "rgba(0, 0, 0, 0)"
+      },
+      {
+        "tag": "A",
+        "text": "Back to the house",
+        "x": 95,
+        "y": 555,
+        "width": 200,
+        "height": 46,
+        "font": "HDSBody, system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": "500",
+        "lineHeight": "20px",
+        "letterSpacing": "normal",
+        "color": "rgb(244, 236, 221)",
+        "background": "rgb(53, 94, 91)"
+      },
+      {
+        "tag": "FOOTER",
+        "text": "A little home on the internet.Still growing. Always curious.Back to the doorsColophonAccessibilityCo",
+        "x": 0,
+        "y": 881,
+        "width": 390,
+        "height": 306,
+        "font": "HDSBody, system-ui, sans-serif",
+        "fontSize": "17px",
+        "fontWeight": "400",
+        "lineHeight": "28.05px",
+        "letterSpacing": "normal",
+        "color": "rgb(52, 59, 57)",
+        "background": "rgba(0, 0, 0, 0)"
+      }
+    ]
+  }
+}

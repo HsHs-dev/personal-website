@@ -1,0 +1,409 @@
+{
+  "colors": {
+    "plaster": {
+      "hex": "#EEE6D7",
+      "rgb": "rgb(238 230 215)",
+      "hsl": "hsl(39.13 40.35% 88.82%)",
+      "oklch": "oklch(92.7174% 0.021806 83.263)",
+      "luminance": 0.7967706817206187
+    },
+    "paper": {
+      "hex": "#F4ECDD",
+      "rgb": "rgb(244 236 221)",
+      "hsl": "hsl(39.13 51.11% 91.18%)",
+      "oklch": "oklch(94.5306% 0.021705 83.264)",
+      "luminance": 0.8444445991807018
+    },
+    "oat": {
+      "hex": "#DFD3BF",
+      "rgb": "rgb(223 211 191)",
+      "hsl": "hsl(37.5 33.33% 81.18%)",
+      "oklch": "oklch(87.1186% 0.030046 80.646)",
+      "luminance": 0.6603809451730951
+    },
+    "ink": {
+      "hex": "#343B39",
+      "rgb": "rgb(52 59 57)",
+      "hsl": "hsl(162.86 6.31% 21.76%)",
+      "oklch": "oklch(34.5034% 0.010038 176.695)",
+      "luminance": 0.04153401306878805
+    },
+    "muted": {
+      "hex": "#62655D",
+      "rgb": "rgb(98 101 93)",
+      "hsl": "hsl(82.5 4.12% 38.04%)",
+      "oklch": "oklch(50.1553% 0.01296 123.676)",
+      "luminance": 0.1269434466231551
+    },
+    "dusk": {
+      "hex": "#202E38",
+      "rgb": "rgb(32 46 56)",
+      "hsl": "hsl(205 27.27% 17.25%)",
+      "oklch": "oklch(29.3043% 0.026298 239.864)",
+      "luminance": 0.02546590103577575
+    },
+    "duskPanel": {
+      "hex": "#2D3D46",
+      "rgb": "rgb(45 61 70)",
+      "hsl": "hsl(201.6 21.74% 22.55%)",
+      "oklch": "oklch(34.9797% 0.026034 233.114)",
+      "luminance": 0.04337571863850453
+    },
+    "moon": {
+      "hex": "#D9E2DC",
+      "rgb": "rgb(217 226 220)",
+      "hsl": "hsl(140 13.43% 86.86%)",
+      "oklch": "oklch(90.4242% 0.012574 156.98)",
+      "luminance": 0.7431173329310141
+    },
+    "mist": {
+      "hex": "#B4C2C0",
+      "rgb": "rgb(180 194 192)",
+      "hsl": "hsl(171.43 10.29% 73.33%)",
+      "oklch": "oklch(80.2673% 0.015641 186.596)",
+      "luminance": 0.5209264261455728
+    },
+    "plum": {
+      "hex": "#774C65",
+      "rgb": "rgb(119 76 101)",
+      "hsl": "hsl(325.12 22.05% 38.24%)",
+      "oklch": "oklch(47.3357% 0.067957 344.227)",
+      "luminance": 0.10030406505583152
+    },
+    "clay": {
+      "hex": "#9A5845",
+      "rgb": "rgb(154 88 69)",
+      "hsl": "hsl(13.41 38.12% 43.73%)",
+      "oklch": "oklch(53.2195% 0.092461 36.886)",
+      "luminance": 0.1427914283286406
+    },
+    "chalkBlue": {
+      "hex": "#486C7B",
+      "rgb": "rgb(72 108 123)",
+      "hsl": "hsl(197.65 26.15% 38.24%)",
+      "oklch": "oklch(50.9964% 0.047392 225.996)",
+      "luminance": 0.1353290210436873
+    },
+    "ochre": {
+      "hex": "#C6A15B",
+      "rgb": "rgb(198 161 91)",
+      "hsl": "hsl(39.25 48.42% 56.67%)",
+      "oklch": "oklch(72.7854% 0.09887 82.082)",
+      "luminance": 0.38250835935742444
+    },
+    "desk": {
+      "hex": "#E4E5DA",
+      "rgb": "rgb(228 229 218)",
+      "hsl": "hsl(65.45 17.46% 87.65%)",
+      "oklch": "oklch(91.8098% 0.014734 110.895)",
+      "luminance": 0.7759455887113785
+    },
+    "petrol": {
+      "hex": "#355E5B",
+      "rgb": "rgb(53 94 91)",
+      "hsl": "hsl(175.61 27.89% 28.82%)",
+      "oklch": "oklch(45.0907% 0.04652 189.628)",
+      "luminance": 0.09517622208276194
+    },
+    "walnut": {
+      "hex": "#49392F",
+      "rgb": "rgb(73 57 47)",
+      "hsl": "hsl(23.08 21.67% 23.53%)",
+      "oklch": "oklch(35.8971% 0.028266 53.584)",
+      "luminance": 0.0454795834356667
+    },
+    "tea": {
+      "hex": "#EAD5AC",
+      "rgb": "rgb(234 213 172)",
+      "hsl": "hsl(39.68 59.62% 79.61%)",
+      "oklch": "oklch(88.0102% 0.058711 83.978)",
+      "luminance": 0.6805948238096687
+    },
+    "amber": {
+      "hex": "#CBA363",
+      "rgb": "rgb(203 163 99)",
+      "hsl": "hsl(36.92 50% 59.22%)",
+      "oklch": "oklch(73.8106% 0.094673 78.234)",
+      "luminance": 0.39791748180632674
+    },
+    "pond": {
+      "hex": "#172F30",
+      "rgb": "rgb(23 47 48)",
+      "hsl": "hsl(182.4 35.21% 13.92%)",
+      "oklch": "oklch(28.6175% 0.030082 199.08)",
+      "luminance": 0.02428589040637308
+    },
+    "reed": {
+      "hex": "#254344",
+      "rgb": "rgb(37 67 68)",
+      "hsl": "hsl(181.94 29.52% 20.59%)",
+      "oklch": "oklch(35.9945% 0.03592 198.422)",
+      "luminance": 0.04824979494256256
+    },
+    "leaf": {
+      "hex": "#B4C8AA",
+      "rgb": "rgb(180 200 170)",
+      "hsl": "hsl(100 21.43% 72.55%)",
+      "oklch": "oklch(80.9425% 0.046686 135.124)",
+      "luminance": 0.5391413102273247
+    },
+    "firefly": {
+      "hex": "#DED08A",
+      "rgb": "rgb(222 208 138)",
+      "hsl": "hsl(50 56% 70.59%)",
+      "oklch": "oklch(85.3119% 0.090814 98.264)",
+      "luminance": 0.624763238468659
+    },
+    "moss": {
+      "hex": "#4D654B",
+      "rgb": "rgb(77 101 75)",
+      "hsl": "hsl(115.38 14.77% 34.51%)",
+      "oklch": "oklch(47.9559% 0.050089 142.803)",
+      "luminance": 0.11393141167586257
+    },
+    "rose": {
+      "hex": "#F0C4BB",
+      "rgb": "rgb(240 196 187)",
+      "hsl": "hsl(10.19 63.86% 83.73%)",
+      "oklch": "oklch(85.6258% 0.052062 31.571)",
+      "luminance": 0.6159297661464416
+    },
+    "berry": {
+      "hex": "#884958",
+      "rgb": "rgb(136 73 88)",
+      "hsl": "hsl(345.71 30.14% 40.98%)",
+      "oklch": "oklch(48.5898% 0.086912 5.595)",
+      "luminance": 0.10703907983975466
+    }
+  },
+  "contrast": [
+    {
+      "foreground": "ink",
+      "background": "plaster",
+      "ratio": 9.25,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "muted",
+      "background": "plaster",
+      "ratio": 4.79,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "ink",
+      "background": "paper",
+      "ratio": 9.77,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "muted",
+      "background": "paper",
+      "ratio": 5.05,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "moon",
+      "background": "dusk",
+      "ratio": 10.51,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "mist",
+      "background": "dusk",
+      "ratio": 7.57,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "moon",
+      "background": "duskPanel",
+      "ratio": 8.49,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "mist",
+      "background": "duskPanel",
+      "ratio": 6.11,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "plum",
+      "background": "paper",
+      "ratio": 5.95,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "paper",
+      "background": "plum",
+      "ratio": 5.95,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "clay",
+      "background": "paper",
+      "ratio": 4.64,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "chalkBlue",
+      "background": "paper",
+      "ratio": 4.83,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "ink",
+      "background": "desk",
+      "ratio": 9.02,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "muted",
+      "background": "desk",
+      "ratio": 4.67,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "petrol",
+      "background": "desk",
+      "ratio": 5.69,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "paper",
+      "background": "petrol",
+      "ratio": 6.16,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "tea",
+      "background": "walnut",
+      "ratio": 7.65,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "amber",
+      "background": "walnut",
+      "ratio": 4.69,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "walnut",
+      "background": "tea",
+      "ratio": 7.65,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "moon",
+      "background": "pond",
+      "ratio": 10.68,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "leaf",
+      "background": "pond",
+      "ratio": 7.93,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "firefly",
+      "background": "pond",
+      "ratio": 9.08,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "moon",
+      "background": "reed",
+      "ratio": 8.07,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "leaf",
+      "background": "reed",
+      "ratio": 6,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "pond",
+      "background": "firefly",
+      "ratio": 9.08,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "moss",
+      "background": "paper",
+      "ratio": 5.46,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "berry",
+      "background": "paper",
+      "ratio": 5.7,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "rose",
+      "background": "pond",
+      "ratio": 8.96,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "rose",
+      "background": "dusk",
+      "ratio": 8.82,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "ink",
+      "background": "oat",
+      "ratio": 7.76,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "ink",
+      "background": "ochre",
+      "ratio": 4.73,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "petrol",
+      "background": "plaster",
+      "ratio": 5.83,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "plum",
+      "background": "plaster",
+      "ratio": 5.63,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "firefly",
+      "background": "dusk",
+      "ratio": 8.94,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "firefly",
+      "background": "duskPanel",
+      "ratio": 7.23,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "firefly",
+      "background": "reed",
+      "ratio": 6.87,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "rose",
+      "background": "reed",
+      "ratio": 6.78,
+      "normalTextAA": true
+    },
+    {
+      "foreground": "petrol",
+      "background": "paper",
+      "ratio": 6.16,
+      "normalTextAA": true
+    }
+  ]
+}
