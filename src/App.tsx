@@ -3,21 +3,21 @@ import { projects } from "./content/projects";
 function App() {
   return (
     <>
-      <div className="min-h-dvh bg-page w-full">
+      <div className="min-h-dvh bg-page w-full text-primary">
         <header>
           <h1 className="font-bold">Hassan's Digital Space</h1>
           <p>Welcome to my cozy home 🏡</p>
         </header>
-        <main>
+        <main className="bg-surface">
           <h2>Projects</h2>
           <ul>
             {projects.map((project) => {
               return (
                 <li key={project.slug}>
-                  <a target="_blank" href={project.href}>
+                  <a target="_blank" href={project.href} className="focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-focus">
                     {project.title}
                   </a>
-                  <p>{project.tagline}</p>
+                  <p className="text-secondary">{project.tagline}</p>
                 </li>
               );
             })}
@@ -25,7 +25,7 @@ function App() {
         </main>
         <footer>
           <h2>Contact Links:</h2>
-          <ul>
+          <ul className="[&_a:focus-visible]:outline-3 [&_a:focus-visible]:outline-offset-3 [&_a:focus-visible]:outline-focus">
             <li>
               <a target="_blank" href="https://linkedin.com/in/hshsdev/">
                 LinkedIn
